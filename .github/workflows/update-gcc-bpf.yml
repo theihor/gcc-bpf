@@ -1,5 +1,7 @@
 name: Build latest GCC
 on:
+  schedule:
+    - cron: '0 0 * * *'
   push:
     branches:
       - 'main'
@@ -18,10 +20,10 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y build-essential file flex texinfo wget xz-utils
+          sudo apt-get install -y build-essential file flex texinfo wget xz-utils zstd
 
       - name: Build GCC
-        uses: libbpf/ci/build-bpf-gcc@v3
+        uses: libbpf/ci/build-bpf-gcc@main
         with:
           install-dir: gcc-bpf
 

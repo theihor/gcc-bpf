@@ -21,8 +21,8 @@ if [[ -z "$built_release_tag" ]]; then
 fi
 
 cd $(dirname $(realpath $GCC_BPF_INSTALLDIR))
-tar -cJvf ${built_release_tag}.tar.xz $(basename $(realpath $GCC_BPF_INSTALLDIR))
+tar -I "zstd -19 -T0" -cf ${built_release_tag}.tar.zst $(basename $(realpath $GCC_BPF_INSTALLDIR))
 
 # assume access to gh and upload a new release
-gh release create ${built_release_tag} ./${built_release_tag}.tar.xz -p
+gh release create ${built_release_tag} ./${built_release_tag}.tar.zst -p
 
