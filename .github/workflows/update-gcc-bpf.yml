@@ -5,6 +5,12 @@ on:
   push:
     branches:
       - 'main'
+  workflow_dispatch:
+    inputs:
+      gcc-version:
+        description: 'Major GCC version to build (e.g. 15, 16)'
+        required: false
+        default: '15'
 
 jobs:
   build-and-release:
@@ -26,6 +32,8 @@ jobs:
         uses: libbpf/ci/build-bpf-gcc@main
         with:
           install-dir: gcc-bpf
+          # Empty on schedule/push events -> defaults to 15 in the action.
+          gcc-version: ${{ inputs.gcc-version }}
 
       - name: Update release
         env:
