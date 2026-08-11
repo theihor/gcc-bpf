@@ -6,11 +6,6 @@ on:
     branches:
       - 'main'
   workflow_dispatch:
-    inputs:
-      gcc-version:
-        description: 'Major GCC version to build (e.g. 15, 16)'
-        required: false
-        default: '15'
 
 jobs:
   build-and-release:
@@ -32,8 +27,11 @@ jobs:
         uses: libbpf/ci/build-bpf-gcc@main
         with:
           install-dir: gcc-bpf
-          # Empty on schedule/push events -> defaults to 15 in the action.
-          gcc-version: ${{ inputs.gcc-version }}
+          # Bump this when BPF CI moves to a newer GCC series. Hardcoded on
+          # purpose: BPF CI uses whichever release here is newest, so a run
+          # that built a different series would silently become the compiler
+          # it tests with, and its denylist would stop matching.
+          gcc-version: '16'
 
       - name: Update release
         env:
